@@ -59,8 +59,232 @@ function AnimatedButton({children = "Agendar Agora", href = "https://whats.link/
     );
 }
 
+// ── SERVICE CARD ──────────────────────────────────────────────────────────────
+function ServiceCard({pkg, index}) {
+    const [hovered, setHovered] = useState(false);
+
+    return (
+        <div
+            className="svc-card-new card-anim"
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            style={{
+                position: "relative",
+                borderRadius: 24,
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                background: "#fff",
+                border: pkg.popular
+                    ? `1.5px solid ${pkg.accent}`
+                    : "1px solid rgba(0,0,0,.07)",
+                boxShadow: hovered
+                    ? "0 24px 48px rgba(236,72,153,.13)"
+                    : "0 4px 16px rgba(0,0,0,.05)",
+                transform: hovered ? "translateY(-8px)" : "translateY(0)",
+                transition: "transform .4s cubic-bezier(.23,1,.32,1), box-shadow .4s, border-color .3s",
+                cursor: "pointer",
+                height: "100%",
+            }}
+        >
+            {/* Popular stripe — thin, not a chunky banner */}
+            {pkg.popular && (
+                <div style={{
+                    position: "absolute", top: 0, left: 0, right: 0,
+                    height: 3, zIndex: 10,
+                    background: `linear-gradient(90deg, ${pkg.accent}, #ec4899, ${pkg.accent})`,
+                }}/>
+            )}
+
+            {/* Photo area */}
+            <div style={{
+                position: "relative",
+                height: 260,
+                overflow: "hidden",
+                flexShrink: 0,
+            }}>
+                <img
+                    src={pkg.img}
+                    alt={pkg.title}
+                    style={{
+                        width: "100%", height: "100%",
+                        objectFit: "cover", display: "block",
+                        transform: hovered ? "scale(1.05)" : "scale(1)",
+                        transition: "transform .6s ease",
+                        filter: "saturate(1.05)",
+                    }}
+                />
+                {/* Gradient fade into white card bottom */}
+                <div style={{
+                    position: "absolute", bottom: 0, left: 0, right: 0,
+                    height: 60,
+                    background: "linear-gradient(to bottom, transparent, #fff)",
+                }}/>
+
+                {/* Editorial index stamp */}
+                <div style={{
+                    position: "absolute", top: 14, left: 16,
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontStyle: "italic",
+                    fontSize: "2.6rem",
+                    fontWeight: 400,
+                    color: "rgba(255,255,255,.9)",
+                    lineHeight: 1,
+                    textShadow: "0 2px 12px rgba(0,0,0,.35)",
+                    letterSpacing: "-0.03em",
+                }}>
+                    {String(index + 1).padStart(2, "0")}
+                </div>
+
+                {/* Popular badge — small & tasteful */}
+                {pkg.popular && (
+                    <div style={{
+                        position: "absolute", top: 14, right: 14,
+                        background: "#ec4899",
+                        color: "#fff",
+                        fontSize: ".6rem",
+                        fontWeight: 600,
+                        letterSpacing: ".1em",
+                        textTransform: "uppercase",
+                        padding: ".3rem .65rem",
+                        borderRadius: 50,
+                    }}>
+                        ★ Popular
+                    </div>
+                )}
+            </div>
+
+            {/* Info area — clean white */}
+            <div style={{
+                flex: 1,
+                padding: "1rem 1.5rem 1.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: ".75rem",
+            }}>
+                {/* Top row: eyebrow + duration */}
+                <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+                    <span style={{
+                        fontSize: ".65rem",
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        textTransform: "uppercase",
+                        letterSpacing: ".1em",
+                    }}>
+                        {pkg.tag}
+                    </span>
+                    <span style={{
+                        fontSize: ".65rem",
+                        color: "#c9b0ba",
+                        fontWeight: 400,
+                        letterSpacing: ".05em",
+                    }}>
+                        {pkg.duration}
+                    </span>
+                </div>
+
+                {/* Title + Price */}
+                <div style={{display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: ".5rem"}}>
+                    <h3 style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "clamp(1.6rem, 3.5vw, 2rem)",
+                        fontWeight: 400,
+                        color: "#1a0a0f",
+                        lineHeight: 1,
+                        margin: 0,
+                    }}>
+                        {pkg.title}
+                    </h3>
+                    <span style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "1.5rem",
+                        fontWeight: 400,
+                        color: pkg.accent,
+                        lineHeight: 1,
+                        flexShrink: 0,
+                    }}>
+                        {pkg.price}
+                    </span>
+                </div>
+
+                {/* Thin divider */}
+                <div style={{height: 1, background: "#f3f4f6"}}/>
+
+                {/* Perks — always visible, compact */}
+                <div style={{display: "flex", flexDirection: "column", gap: 6}}>
+                    {pkg.perks.map((p, pi) => (
+                        <div key={pi} style={{
+                            display: "flex", alignItems: "center", gap: 8,
+                        }}>
+                            <div style={{
+                                width: 4, height: 4, borderRadius: "50%",
+                                background: pkg.accent, flexShrink: 0,
+                            }}/>
+                            <span style={{
+                                fontSize: ".78rem", color: "#6b7280",
+                                fontWeight: 300, lineHeight: 1.4,
+                            }}>
+                                {p}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* CTA */}
+                <a
+                    href="https://whats.link/arstyllus"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginTop: "auto",
+                        paddingTop: ".75rem",
+                        borderTop: "1px solid #f9f0f5",
+                        textDecoration: "none",
+                        color: "#1a0a0f",
+                    }}
+                >
+                    <span style={{fontSize: ".8rem", fontWeight: 500}}>Reservar agora</span>
+                    <span style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: 32, height: 32,
+                        borderRadius: "50%",
+                        background: pkg.popular ? pkg.accent : "#f9f0f5",
+                        color: pkg.popular ? "#fff" : "#1a0a0f",
+                        fontSize: ".85rem",
+                        transition: "transform .2s",
+                        transform: hovered ? "translateX(3px)" : "none",
+                    }}>→</span>
+                </a>
+            </div>
+        </div>
+    );
+}
+
+// ── SLIDER DOTS ───────────────────────────────────────────────────────────────
+function SliderDots({total, active}) {
+    return (
+        <div style={{display: "flex", justifyContent: "center", gap: 6, marginTop: "1.25rem"}}>
+            {Array.from({length: total}).map((_, i) => (
+                <div key={i} style={{
+                    width: i === active ? 20 : 6,
+                    height: 6,
+                    borderRadius: 3,
+                    background: i === active ? "#ec4899" : "#f9a8d4",
+                    transition: "all .35s cubic-bezier(.23,1,.32,1)",
+                }}/>
+            ))}
+        </div>
+    );
+}
+
 export default function App() {
-    const [hoveredSvc, setHoveredSvc] = useState(null);
+    const [activeCard, setActiveCard] = useState(0);
+    const sliderRef = useRef(null);
     const c1 = useCounter(13);
     const c2 = useCounter(500);
     const c3 = useCounter(2500);
@@ -96,16 +320,45 @@ export default function App() {
         return () => window.removeEventListener('mousemove', onMove);
     }, []);
 
+    // Slider scroll tracking
+    const onSliderScroll = () => {
+        const el = sliderRef.current;
+        if (!el) return;
+        const cardWidth = el.firstChild?.offsetWidth ?? 0;
+        const gap = 16;
+        const idx = Math.round(el.scrollLeft / (cardWidth + gap));
+        setActiveCard(Math.max(0, idx));
+    };
+
     const services = [
-        {img:"https://images.unsplash.com/photo-1606251706444-d069cd266189?w=900&auto=format&fit=crop&q=60",
-            eyebrow:"Essencial · 1–2 h",title:"Penteado",price:"R$ 150",tag:"Festas & Eventos",accent:"#fda4af",
-            perks:["Escova ou ondas","Coque ou semi-preso","1 local de atend."]},
-        {img:"https://images.unsplash.com/photo-1574871786514-46e1680ea587?w=900&auto=format&fit=crop&q=60",
-            eyebrow:"★ Mais Popular · 2–3 h",title:"Noiva Completa",price:"R$ 280",tag:"Para o Grande Dia",accent:"#ec4899",popular:true,
-            perks:["Penteado exclusivo","Teste incluso","Atendimento em domicílio","Acessórios inclusos"]},
-        {img:"https://images.unsplash.com/photo-1481066717861-4775e000c88a?w=900&auto=format&fit=crop&q=60",
-            eyebrow:"Premium · 4+ h",title:"Dia da Noiva",price:"R$ 450",tag:"Equipe Completa",accent:"#f9a8d4",
-            perks:["Noiva + madrinhas","Maquiagem inclusa","Atendimento em domicílio","Acessórios inclusos"]},
+        {
+            img: "https://images.unsplash.com/photo-1606251706444-d069cd266189?w=900&auto=format&fit=crop&q=60",
+            title: "Penteado",
+            price: "R$ 150",
+            tag: "Festas & Eventos",
+            duration: "1–2h",
+            accent: "#fda4af",
+            perks: ["Escova ou ondas glamour", "Coque ou semi-preso", "Atendimento local"],
+        },
+        {
+            img: "https://images.unsplash.com/photo-1574871786514-46e1680ea587?w=900&auto=format&fit=crop&q=60",
+            title: "Noiva Completa",
+            price: "R$ 280",
+            tag: "Para o Grande Dia",
+            duration: "2–3h",
+            accent: "#ec4899",
+            popular: true,
+            perks: ["Penteado exclusivo", "Teste incluso", "Atendimento em domicílio", "Acessórios inclusos"],
+        },
+        {
+            img: "https://images.unsplash.com/photo-1481066717861-4775e000c88a?w=900&auto=format&fit=crop&q=60",
+            title: "Dia da Noiva",
+            price: "R$ 450",
+            tag: "Equipe Completa",
+            duration: "4h+",
+            accent: "#f9a8d4",
+            perks: ["Noiva + madrinhas", "Maquiagem inclusa", "Atendimento em domicílio", "Acessórios inclusos"],
+        },
     ];
 
     const portfolio = [
@@ -164,21 +417,20 @@ export default function App() {
       color:#aaa;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;border-right:1px solid rgba(0,0,0,.05)}
 
     /* ── SERVICE CARDS ── */
-    .card-anim{opacity:0;transform:translateY(32px);filter:blur(6px);animation:fadein .75s ease-out forwards}
-    .card-anim:nth-child(1){animation-delay:.25s}
-    .card-anim:nth-child(2){animation-delay:.4s}
-    .card-anim:nth-child(3){animation-delay:.55s}
+    .card-anim{opacity:0;transform:translateY(24px);filter:blur(4px);animation:fadein .75s ease-out forwards}
+    .card-anim:nth-child(1){animation-delay:.2s}
+    .card-anim:nth-child(2){animation-delay:.35s}
+    .card-anim:nth-child(3){animation-delay:.5s}
     @keyframes fadein{to{opacity:1;transform:translateY(0);filter:blur(0)}}
 
-    .svc-card{position:relative;overflow:hidden;border-radius:28px;aspect-ratio:3/5;cursor:pointer;
-      transition:transform .4s cubic-bezier(.23,1,.32,1),box-shadow .4s}
-    .svc-card:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 20px 40px rgba(236,72,153,.15)}
-    .svc-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
-    .svc-card:hover img{transform:scale(1.06)}
-    .svc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,3,8,.9) 0%,rgba(10,3,8,.4) 40%,transparent 100%)}
-    .svc-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:1.5rem}
-    .svc-perks{display:flex;flex-direction:column;gap:6px;max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .35s ease}
-    .svc-card:hover .svc-perks{max-height:200px;opacity:1}
+    /* Desktop grid */
+    .svc-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:1.25rem;
+      align-items:stretch;
+    }
+    .svc-grid > *{ height: 500px; }
 
     /* ── PORTFOLIO ── */
     .pitem{position:relative;overflow:hidden;border-radius:20px;aspect-ratio:3/4;cursor:pointer}
@@ -191,6 +443,9 @@ export default function App() {
     /* ── ABOUT ── */
     .about-grid-new{display:grid;grid-template-columns:1.8fr 1fr;gap:2rem}
 
+    /* ── SLIDER hint on desktop – hide dots ── */
+    .slider-dots-mobile{display:none}
+
     /* ── RESPONSIVO ── */
     @media(max-width:900px){
       .hero-ed-bottom{grid-template-columns:1fr!important}
@@ -198,10 +453,30 @@ export default function App() {
       .hero-ed-col-l{border-right:none!important;padding:1.5rem!important}
       .hero-title{font-size:clamp(4rem,18vw,6rem)!important}
       .about-grid-new{grid-template-columns:1fr!important}
-      .svc-grid{grid-template-columns:1fr!important}
       .port-grid{grid-template-columns:repeat(2,1fr)!important}
       .hide-mobile{display:none!important}
-      .svc-card{aspect-ratio:4/5}
+
+      /* Mobile horizontal slider */
+      .svc-grid{
+        display:flex!important;
+        overflow-x:auto!important;
+        scroll-snap-type:x mandatory!important;
+        -webkit-overflow-scrolling:touch!important;
+        scrollbar-width:none!important;
+        gap:1rem!important;
+        /* Negative margin to break out of section padding, add matching padding */
+        margin:0 -1.5rem!important;
+        padding:0 1.5rem 1rem!important;
+      }
+      .svc-grid::-webkit-scrollbar{display:none!important}
+      .svc-grid > *{
+        flex:0 0 82%!important;
+        scroll-snap-align:start!important;
+        height:480px!important;
+      }
+
+      /* Show dots on mobile */
+      .slider-dots-mobile{display:flex}
     }
     `;
 
@@ -234,7 +509,6 @@ export default function App() {
                 <section style={{background:"rgba(255,255,255,0.87)",borderRadius:32,marginTop:"1rem",
                     boxShadow:"0 8px 40px rgba(236,72,153,.06)",overflow:"hidden",position:"relative"}}>
 
-                    {/* Strip topo */}
                     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
                         padding:".75rem 2.5rem",borderBottom:"1px solid rgba(0,0,0,.06)"}}>
                         <span className="fade-in fi-1" style={{fontSize:".68rem",color:"#aaa",letterSpacing:".12em",textTransform:"uppercase",fontWeight:500}}>
@@ -245,7 +519,6 @@ export default function App() {
                         </span>
                     </div>
 
-                    {/* Título gigante full-width */}
                     <div style={{padding:"0 2rem",borderBottom:"1px solid rgba(0,0,0,.06)"}}>
                         <h1 className="hero-title" style={{fontSize:"clamp(5rem,13vw,11rem)",lineHeight:.84,
                             letterSpacing:"-0.05em",fontWeight:300}}>
@@ -258,18 +531,12 @@ export default function App() {
                         </h1>
                     </div>
 
-                    {/* Bottom: 3 colunas editoriais */}
                     <div className="hero-ed-bottom" style={{display:"grid",gridTemplateColumns:"1fr 1.5fr 1fr",minHeight:460}}>
-
-                        {/* Col Esq */}
                         <div className="hero-ed-col-l fade-in fi-2" style={{padding:"2rem 2.5rem",borderRight:"1px solid rgba(0,0,0,.06)",
                             display:"flex",flexDirection:"column",justifyContent:"space-between"}}>
-
                             <p style={{fontSize:".95rem",color:"#6b7280",lineHeight:1.85,maxWidth:260}}>
                                 Especialista em penteados para noivas e eventos. Cada fio conta uma história.
                             </p>
-
-                            {/* Stats verticais */}
                             <div style={{display:"flex",flexDirection:"column",gap:"1.5rem"}}>
                                 {[{n:`${c1}+`,l:"Anos de experiência"},{n:`${c2}+`,l:"Noivas atendidas"},{n:`${(c3/1000).toFixed(1)}K`,l:"Seguidores no Instagram"}].map(({n,l},i)=>(
                                     <div key={i} style={{display:"flex",alignItems:"baseline",gap:"1rem",borderTop:"1px solid #f3f4f6",paddingTop:"1rem"}}>
@@ -278,8 +545,6 @@ export default function App() {
                                     </div>
                                 ))}
                             </div>
-
-                            {/* CTAs */}
                             <div style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
                                 <AnimatedButton>Agendar Agora</AnimatedButton>
                                 <a href="https://www.instagram.com/arielli_styllus" target="_blank" rel="noopener noreferrer"
@@ -289,7 +554,6 @@ export default function App() {
                             </div>
                         </div>
 
-                        {/* Col Centro: Foto full-bleed */}
                         <div className="hero-ed-col-img" style={{overflow:"hidden",position:"relative",borderRight:"1px solid rgba(0,0,0,.06)"}}>
                             <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=900&q=85"
                                  alt="Arielli Styllus"
@@ -304,11 +568,8 @@ export default function App() {
                             </div>
                         </div>
 
-                        {/* Col Dir */}
                         <div className="hero-ed-col-r fade-in fi-3" style={{padding:"2rem 2.5rem",display:"flex",flexDirection:"column",
                             justifyContent:"space-between",gap:"1.5rem"}}>
-
-                            {/* Elemento rotativo */}
                             <div style={{display:"flex",justifyContent:"flex-end"}}>
                                 <div style={{position:"relative",width:90,height:90}}>
                                     <svg viewBox="0 0 100 100" width="90" height="90" className="spin-label">
@@ -320,8 +581,6 @@ export default function App() {
                                     <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.4rem",color:"#ec4899"}}>✦</div>
                                 </div>
                             </div>
-
-                            {/* Foto secundária */}
                             <div style={{flex:1,borderRadius:20,overflow:"hidden",minHeight:200}}>
                                 <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=600&q=80"
                                      alt="Penteado"
@@ -330,8 +589,6 @@ export default function App() {
                                      onMouseEnter={e=>e.target.style.transform="scale(1.04)"}
                                      onMouseLeave={e=>e.target.style.transform="scale(1)"}/>
                             </div>
-
-                            {/* Nota editorial */}
                             <div style={{borderTop:"1px solid #f0f0f0",paddingTop:"1rem"}}>
                                 <p style={{fontSize:".72rem",color:"#aaa",letterSpacing:".06em",lineHeight:1.6,textTransform:"uppercase"}}>
                                     Atendimento em domicílio<br/>Parapuã e região · SP
@@ -340,7 +597,6 @@ export default function App() {
                         </div>
                     </div>
 
-                    {/* Marquee */}
                     <div className="marquee-outer">
                         <div className="marquee-track">
                             {[...Array(2)].flatMap((_,ri)=>
@@ -427,46 +683,21 @@ export default function App() {
                             Orçamento personalizado ↗
                         </a>
                     </div>
-                    <div className="svc-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"1.5rem"}}>
-                        {services.map((pkg,i)=>(
-                            <div key={i} className="svc-card card-anim" onMouseEnter={()=>setHoveredSvc(i)} onMouseLeave={()=>setHoveredSvc(null)}>
-                                <img src={pkg.img} alt={pkg.title}/>
-                                <div className="svc-overlay"/>
-                                {pkg.popular&&(
-                                    <div style={{position:"absolute",top:0,left:0,right:0,background:"linear-gradient(90deg,#ec4899,#f472b6)",padding:".35rem",textAlign:"center",fontSize:".68rem",fontWeight:600,color:"#fff",letterSpacing:".1em",textTransform:"uppercase",zIndex:2}}>
-                                        ★ Mais Popular
-                                    </div>
-                                )}
-                                <div className="svc-content" style={{paddingTop:pkg.popular?"2.5rem":"1.5rem"}}>
-                                    <div>
-                                        <span style={{fontSize:".68rem",fontWeight:500,color:"rgba(255,255,255,.7)",textTransform:"uppercase",letterSpacing:".1em",background:"rgba(0,0,0,.4)",backdropFilter:"blur(6px)",padding:".3rem .7rem",borderRadius:50}}>
-                                            {pkg.eyebrow}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <div className="svc-perks" style={{marginBottom:".75rem"}}>
-                                            {pkg.perks.map((p,pi)=>(
-                                                <div key={pi} style={{display:"flex",alignItems:"center",gap:8}}>
-                                                    <span style={{width:5,height:5,borderRadius:"50%",background:pkg.accent,flexShrink:0}}/>
-                                                    <span style={{fontSize:".78rem",color:"rgba(255,255,255,.9)",fontWeight:300}}>{p}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div style={{borderTop:"1px solid rgba(255,255,255,.2)",paddingTop:".875rem"}}>
-                                            <h3 className="cormorant" style={{fontSize:"clamp(2rem,3.5vw,2.75rem)",color:"#fff",lineHeight:1}}>{pkg.title}</h3>
-                                            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:".6rem"}}>
-                                                <p style={{fontSize:".7rem",color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:".1em"}}>{pkg.tag}</p>
-                                                <p className="cormorant" style={{fontSize:"1.6rem",color:pkg.accent,lineHeight:1}}>{pkg.price}</p>
-                                            </div>
-                                            <a href="https://whats.link/arstyllus" target="_blank" rel="noopener noreferrer"
-                                               style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6,marginTop:".875rem",padding:".65rem",borderRadius:12,background:"rgba(255,255,255,.15)",backdropFilter:"blur(8px)",border:"1px solid rgba(255,255,255,.2)",color:"#fff",textDecoration:"none",fontSize:".8125rem",fontWeight:500}}>
-                                                Reservar Agora →
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                    {/* Cards — grid on desktop, snap-slider on mobile */}
+                    <div
+                        className="svc-grid"
+                        ref={sliderRef}
+                        onScroll={onSliderScroll}
+                    >
+                        {services.map((pkg, i) => (
+                            <ServiceCard key={i} pkg={pkg} index={i}/>
                         ))}
+                    </div>
+
+                    {/* Dots — only visible on mobile via CSS */}
+                    <div className="slider-dots-mobile" style={{justifyContent:"center",gap:6,marginTop:"1.25rem"}}>
+                        <SliderDots total={services.length} active={activeCard}/>
                     </div>
                 </section>
 
