@@ -13,6 +13,7 @@ const WA_FOOTER = waLink("Olá, Arielli! Gostaria de agendar um horário pelo Wh
 const WA_PENTEADO = waLink("Olá, Arielli! Tenho interesse no serviço de *Penteado* (R$ 150). Pode me informar a disponibilidade? 💕");
 const WA_NOIVA_COMPLETA = waLink("Olá, Arielli! Tenho interesse no pacote *Noiva Completa* (R$ 280). Pode me informar a disponibilidade? 👰");
 const WA_DIA_DA_NOIVA = waLink("Olá, Arielli! Tenho interesse no pacote *Dia da Noiva* (R$ 450). Pode me informar mais detalhes? 👰✨");
+const WA_LOCALIZACAO = waLink("Olá, Arielli! Quero confirmar o local de atendimento e agendar um horário. 📍");
 
 function useCounter(target, {duration = 1400, delay = 700} = {}) {
     const [count, setCount] = useState(0);
@@ -293,6 +294,179 @@ function SliderDots({total, active}) {
     );
 }
 
+
+/* ── MAP SECTION (CLEAN EDITORIAL COM CORES SUTIS) ────────────────────────── */
+function MapSection() {
+    const [mapLoaded, setMapLoaded] = useState(false);
+
+    const businessHours = [
+        {day: "Segunda", time: "09:00 – 18:00"},
+        {day: "Terça", time: "09:00 – 18:00"},
+        {day: "Quarta", time: "09:00 – 18:00"},
+        {day: "Quinta", time: "09:00 – 18:00"},
+        {day: "Sexta", time: "09:00 – 18:00"},
+        {day: "Sábado", time: "09:00 – 13:00"},
+    ];
+
+    return (
+        <section
+            id="localizacao"
+            style={{
+                background: "#ffffff",
+                borderRadius: 32,
+                marginTop: "1.5rem",
+                padding: "4rem clamp(1.5rem, 5vw, 4rem)",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "4rem",
+                alignItems: "start",
+                boxShadow: "0 10px 40px rgba(0,0,0,0.02)",
+                border: "1px solid #f3f4f6"
+            }}
+        >
+            {/* ── COLUNA DE INFO ── */}
+            <div style={{display: "flex", flexDirection: "column", gap: "3rem"}}>
+                <div>
+                    <h3 style={{
+                        fontSize: "0.7rem",
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        textTransform: "uppercase",
+                        letterSpacing: ".2em",
+                        marginBottom: "1.5rem"
+                    }}>/ Localização</h3>
+
+                    <p style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "2rem",
+                        color: "#1a0a0f",
+                        lineHeight: 1.1,
+                        marginBottom: "0.5rem"
+                    }}>
+                        Parapuã, <span className="italic-chic" style={{color: "#ec4899"}}>São Paulo</span>
+                    </p>
+                    <p style={{fontSize: "0.95rem", color: "#6b7280", lineHeight: 1.6}}>
+                        Atendimento exclusivo em domicílio.<br/>
+                        Levando a experiência do estúdio até você.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 style={{
+                        fontSize: "0.7rem",
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        textTransform: "uppercase",
+                        letterSpacing: ".2em",
+                        marginBottom: "1.5rem"
+                    }}>/ Horários de Atendimento</h3>
+
+                    <div style={{display: "flex", flexDirection: "column", gap: "0.75rem"}}>
+                        {businessHours.map((item, i) => (
+                            <div key={i} style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                borderBottom: "1px solid #f9fafb",
+                                paddingBottom: "0.5rem"
+                            }}>
+                                <span style={{fontSize: "0.9rem", color: "#1a0a0f", fontWeight: 500}}>{item.day}</span>
+                                <span style={{fontSize: "0.9rem", color: "#6b7280"}}>{item.time}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <a
+                    href={WA_LOCALIZACAO}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                        alignSelf: "flex-start",
+                        fontSize: "0.85rem",
+                        fontWeight: 600,
+                        color: "#ec4899",
+                        textDecoration: "none",
+                        borderBottom: "1px solid #fbcfe8",
+                        paddingBottom: "4px",
+                        transition: "all 0.3s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px"
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.borderBottomColor = "#ec4899"}
+                    onMouseLeave={e => e.currentTarget.style.borderBottomColor = "#fbcfe8"}
+                >
+                    Solicitar agendamento via WhatsApp <span style={{fontSize: "1rem"}}>→</span>
+                </a>
+            </div>
+
+            {/* ── COLUNA DO MAPA ── */}
+            <div style={{
+                position: "relative",
+                height: "500px",
+                borderRadius: 24,
+                overflow: "hidden",
+                background: "#f9fafb",
+                border: "1px solid #f3f4f6",
+                boxShadow: "0 20px 40px rgba(0,0,0,0.05)"
+            }}>
+                {!mapLoaded && (
+                    <div style={{
+                        position: "absolute", inset: 0,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        zIndex: 2, background: "#f9fafb"
+                    }}>
+                        <div style={{
+                            width: 25,
+                            height: 25,
+                            border: "2px solid #e5e7eb",
+                            borderTopColor: "#ec4899",
+                            borderRadius: "50%",
+                            animation: "spin-map .8s linear infinite"
+                        }}/>
+                    </div>
+                )}
+
+                <iframe
+                    title="Google Maps Arielli Styllus"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3705.023261928438!2d-50.78927082418993!3d-21.7793606985542!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94942ec625f4b6ef%3A0x5039e779118ab8de!2sR.%20Maranh%C3%A3o%2C%20Parapu%C3%A3%20-%20SP%2C%2017732-354!5e0!3m2!1spt-BR!2sbr!4v1777332215544!5m2!1spt-BR!2sbr"
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        border: "none",
+                        filter: "saturate(0.6) contrast(1.1)", // Reduz a saturação excessiva sem ficar cinza
+                        opacity: mapLoaded ? 1 : 0,
+                        transition: "opacity 1s ease",
+                    }}
+                    onLoad={() => setMapLoaded(true)}
+                    allowFullScreen=""
+                    loading="lazy"
+                />
+
+                {/* Badge Flutuante para dar profundidade */}
+                <div style={{
+                    position: "absolute",
+                    bottom: "20px",
+                    right: "20px",
+                    background: "#ffffff",
+                    padding: "8px 16px",
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    color: "#1a0a0f",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    zIndex: 3
+                }}>
+
+                </div>
+            </div>
+        </section>
+    );
+}
+
 export default function App() {
     const [activeCard, setActiveCard] = useState(0);
     const sliderRef = useRef(null);
@@ -460,6 +634,13 @@ export default function App() {
     .about-grid-new{display:grid;grid-template-columns:1.8fr 1fr;gap:2rem}
     .slider-dots-mobile{display:none}
 
+    /* Map section */
+    @keyframes spin-map{to{transform:rotate(360deg)}}
+    @keyframes pulse-pin{
+      0%,100%{box-shadow:0 0 0 3px rgba(236,72,153,.25)}
+      50%{box-shadow:0 0 0 6px rgba(236,72,153,.1)}
+    }
+
     @media(max-width:900px){
       .hero-ed-bottom{grid-template-columns:1fr!important}
       .hero-ed-col-r,.hero-ed-col-img{display:none!important}
@@ -498,6 +679,10 @@ export default function App() {
       .mobile-section-pad{
         padding:2rem 1.5rem!important;
       }
+      /* Map responsive */
+      .map-section-grid{
+        grid-template-columns:1fr!important;
+      }
     }
     `;
 
@@ -529,7 +714,7 @@ export default function App() {
                             <a className="nav-link hide-mobile" href="#sobre">Sobre</a>
                             <a className="nav-link hide-mobile" href="#servicos">Serviços</a>
                             <a className="nav-link hide-mobile" href="#portfolio">Portfólio</a>
-                            {/* Nav: mensagem geral de agendamento */}
+                            <a className="nav-link hide-mobile" href="#localizacao">Localização</a>
                             <AnimatedButton href={WA_AGENDAR}>Agendar</AnimatedButton>
                         </nav>
                     </div>
@@ -537,6 +722,7 @@ export default function App() {
             </header>
 
             <main style={{maxWidth: 1280, margin: "0 auto", padding: "0 1rem"}}>
+                {/* ── HERO ── */}
                 <section style={{
                     background: "rgba(255,255,255,0.87)",
                     borderRadius: 32,
@@ -634,7 +820,6 @@ export default function App() {
                                 ))}
                             </div>
                             <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
-                                {/* Hero CTA: mensagem geral de agendamento */}
                                 <AnimatedButton href={WA_AGENDAR}>Agendar Agora</AnimatedButton>
                                 <a href="https://www.instagram.com/arielli_styllus" target="_blank"
                                    rel="noopener noreferrer" style={{
@@ -739,6 +924,7 @@ export default function App() {
                     </div>
                 </section>
 
+                {/* ── SOBRE ── */}
                 <section id="sobre" className="mobile-section-pad" style={{
                     background: "rgba(255,255,255,0.82)",
                     borderRadius: 32,
@@ -860,6 +1046,7 @@ export default function App() {
                     </div>
                 </section>
 
+                {/* ── SERVIÇOS ── */}
                 <section id="servicos" className="mobile-section-pad" style={{
                     background: "rgba(255,255,255,0.82)",
                     borderRadius: 32,
@@ -889,7 +1076,6 @@ export default function App() {
                                 para<br/><span className="italic-chic" style={{color: "#f472b6"}}>cada momento.</span>
                             </h2>
                         </div>
-                        {/* Orçamento personalizado */}
                         <a href={WA_ORCAMENTO} target="_blank" rel="noopener noreferrer" style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -914,6 +1100,7 @@ export default function App() {
                     </div>
                 </section>
 
+                {/* ── PORTFÓLIO ── */}
                 <section id="portfolio" className="mobile-section-pad" style={{
                     background: "#0a0406",
                     borderRadius: 32,
@@ -968,6 +1155,7 @@ export default function App() {
                     </div>
                 </section>
 
+                {/* ── DEPOIMENTOS ── */}
                 <section style={{
                     background: "rgba(255,255,255,0.82)",
                     borderRadius: 32,
@@ -1051,6 +1239,10 @@ export default function App() {
                     </div>
                 </section>
 
+                {/* ── MAPA ── */}
+                <MapSection/>
+
+                {/* ── FOOTER ── */}
                 <footer style={{
                     background: "#0a0406",
                     borderRadius: 40,
@@ -1078,7 +1270,6 @@ export default function App() {
                                 margin: 0
                             }}>Pronta para<br/><span className="italic-chic" style={{color: "#f9a8d4"}}>começar?</span>
                             </h2>
-                            {/* Footer CTA: mensagem específica de agendamento via WhatsApp */}
                             <a href={WA_FOOTER} target="_blank" rel="noopener noreferrer" style={{
                                 background: "#f9a8d4",
                                 color: "#111",
@@ -1141,12 +1332,14 @@ export default function App() {
                                     marginBottom: "1.5rem"
                                 }}>/ Navegação</p>
                                 <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
-                                    {["Sobre", "Serviços", "Portfólio"].map((item, i) => (
-                                        <a key={i} href={`#${item.toLowerCase()}`} style={{
-                                            color: "#fff",
-                                            textDecoration: "none",
-                                            fontSize: ".9rem"
-                                        }}>{item}</a>))}
+                                    {["Sobre", "Serviços", "Portfólio", "Localização"].map((item, i) => (
+                                        <a key={i}
+                                           href={`#${item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}
+                                           style={{
+                                               color: "#fff",
+                                               textDecoration: "none",
+                                               fontSize: ".9rem"
+                                           }}>{item}</a>))}
                                 </div>
                             </div>
                         </div>
